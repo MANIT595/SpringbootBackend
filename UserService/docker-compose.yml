@@ -1,0 +1,53 @@
+version: '3.8'  # Specify the version of Docker Compose
+
+services:
+  eureka-server:
+    image: manit595/eureka-service:latest # Replace with your Eureka server image name
+    ports:
+      - "8761:8761"  # Host port:Container port
+    networks:
+      - my-network  # Specify the network to connect to
+
+  user-service:
+    image: manit595/user-service:latest # Replace with your user service image name
+    ports:
+      - "8080:8080"  # Host port:Container port
+    networks:
+      - my-network  # Specify the network to connect to
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/  # URL for Eureka server
+
+  order-service:
+    image: manit595/order-service:latest  # Replace with your order service image name
+    ports:
+      - "8081:8080"  # Host port:Container port
+    networks:
+      - my-network  # Specify the network to connect to
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/  # URL for Eureka server
+
+  product-service:
+    image: manit595/product-service:latest  # Replace with your product service image name
+    ports:
+      - "8082:8080"  # Host port:Container port
+    networks:
+      - my-network  # Specify the network to connect to
+    environment:
+      - EUREKA_SERVER=http://eureka-server:8761/eureka/  # URL for Eureka server
+
+  mysql:
+    image: mysql:latest
+    container_name: mysql-container  # Optional: Name your container
+    environment:
+      MYSQL_ROOT_PASSWORD: admin  # Make sure this is set
+      MYSQL_DATABASE: microservices  # Change this to your desired database name
+      MYSQL_USER: admin  # Change this to your desired username
+      MYSQL_PASSWORD:  # Change this to your desired user password
+    ports:
+      - "3306:3306"  # Expose MySQL on port 3306
+    networks:
+      - my-network
+
+
+networks:
+  my-network:  # Create a custom network for inter-service communication

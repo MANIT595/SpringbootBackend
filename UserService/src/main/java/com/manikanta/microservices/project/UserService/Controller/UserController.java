@@ -14,6 +14,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
         description = "User REST API to implement the CRUD operations"
 )
 @RestController
-@RequestMapping("api/users")
+//@RequestMapping("api/users")
 @AllArgsConstructor
 @CrossOrigin("http://localhost:3000")
 public class UserController {
@@ -71,10 +73,17 @@ public class UserController {
             description = "Got User with id 200"
     )
     @GetMapping("{user-id}")
-    public UserDTO getUserById(@PathVariable("user-id") Long id) throws Exception {
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("user-id") Long id) throws Exception {
         System.out.println("Inside GetUserById Controller");
+        boolean isNewCheckoutEnabled = userService.isFeatureEnabled(id, 1L);
         meterRegistry.counter("getUsersById").increment();
-        return userService.getUser(id);
+        System.out.println("status-----"+isNewCheckoutEnabled);
+        if(isNewCheckoutEnabled){
+            return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(userService.getUserDefault(), HttpStatus.OK);
+        }
     }
 
 

@@ -248,7 +248,30 @@
             <artifactId>reactor-core</artifactId>
         </dependency>
 
-    </dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.togglz/togglz-spring-boot-starter -->
+		<dependency>
+			<groupId>org.togglz</groupId>
+			<artifactId>togglz-spring-boot-starter</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
+
+		<!-- https://mvnrepository.com/artifact/org.togglz/togglz-console -->
+		<dependency>
+			<groupId>org.togglz</groupId>
+			<artifactId>togglz-console</artifactId>
+			<version>4.4.0</version>
+		</dependency>
+
+
+
+	</dependencies>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>

@@ -1,16 +1,15 @@
 package com.manikanta.microservices.project.UserService.Service.Implementation;
 
 //import com.manikanta.microservices.project.UserService.Controller.JWTService;
-import com.manikanta.microservices.project.UserService.DTO.OrderDTO;
-import com.manikanta.microservices.project.UserService.DTO.UserDTO;
-import com.manikanta.microservices.project.UserService.DTO.UserDtoOrders;
-import com.manikanta.microservices.project.UserService.DTO.UserResponse;
+import com.manikanta.microservices.project.UserService.DTO.*;
 import com.manikanta.microservices.project.UserService.Entity.User;
+import com.manikanta.microservices.project.UserService.Enums.MyFeatures;
 import com.manikanta.microservices.project.UserService.Exception.EmailAlreadyFoundException;
 import com.manikanta.microservices.project.UserService.Exception.UserNotFoundException;
 import com.manikanta.microservices.project.UserService.Mapper.AutoUserMapper;
 import com.manikanta.microservices.project.UserService.Repository.UserRepository;
 import com.manikanta.microservices.project.UserService.Service.FeignAPIClient;
+import com.manikanta.microservices.project.UserService.Service.FeignWeblabClient;
 import com.manikanta.microservices.project.UserService.Service.UserService;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.AllArgsConstructor;
@@ -31,6 +30,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.togglz.core.manager.FeatureManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,9 @@ public class UserServiceImplementation implements UserService {
 
 //    @Autowired
 //    private JWTService jwtService;
+
+    @Autowired
+    private FeatureManager featureManager;
 
     @Autowired
     private UserRepository userRepository;
@@ -60,19 +63,43 @@ public class UserServiceImplementation implements UserService {
     @Autowired
             private FeignAPIClient feignAPIClient;
 
+    @Autowired
+    private FeignWeblabClient feignWeblabClient;
+
 //    @Autowired
 //    AuthenticationManager authManager;
 
 //    @Autowired
 //    private ModelMapper mapper;
 
-    @Cacheable(value = "getUserById", key = "#userId")
+//    @Cacheable(value = "getUserById", key = "#userId")
     @Override
     public UserDTO getUser(Long userId){
         logger.info("entered into get user by id method");
         User user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("No User Found with this userId: "+userId));
+        System.out.println("Using the new checkout feature.");
+        return AutoUserMapper.MAPPER.mapToDTO(user);
+//        if (featureManager.isActive(MyFeatures.NEW_CHECKOUT_FEATURE)) {
+//            // New checkout feature logic
+//            User user = userRepository.findById(userId).orElseThrow(()->new UserNotFoundException("No User Found with this userId: "+userId));
+//            System.out.println("Using the new checkout feature.");
+//            return AutoUserMapper.MAPPER.mapToDTO(user);
+//        } else {
+//            // Fallback to old checkout logic
+//            System.out.println("Using the old checkout feature.");
+//            User user = userRepository.findById(Long.valueOf(1)).orElseThrow(()->new UserNotFoundException("No User Found with this userId: "+userId));
+//            return AutoUserMapper.MAPPER.mapToDTO(user);
+//        }
+    }
+
+    @Override
+    public UserDTO getUserDefault(){
+        logger.info("entered into get user by id method");
+        User user = userRepository.findById(1L).orElseThrow(()->new UserNotFoundException("No User Found with this userId: Default"));
+        System.out.println("Using the new checkout feature.");
         return AutoUserMapper.MAPPER.mapToDTO(user);
     }
+
 
     @Override
     @CacheEvict(value = "getUserById", key = "#userId")
@@ -213,6 +240,25 @@ public class UserServiceImplementation implements UserService {
         userDtoOrders.setOrderDTOS(orderDTOS);
         return userDtoOrders;
 
+    }
+
+    // Fetch rollout percentage for the feature
+    @Override
+    public boolean isFeatureEnabled(Long userId, Long weblabId) {
+        WeblabDTO feature = feignWeblabClient.getWeblabById(weblabId);
+        System.out.println("WEBLAB PERCENTAGE"+feature.getWeblabPercentage());
+        if ( feature.getWeblabId() > 0 ) {
+            long rolloutPercentage = feature.getWeblabPercentage();
+            return assignUserToNewFeature(userId, rolloutPercentage);
+        }
+        return false;
+    }
+
+
+    public boolean assignUserToNewFeature(Long userId, Long rolloutPercentage) {
+        int userHash = Math.abs(userId.hashCode()) % 100;
+        System.out.println("USER HASH VALVE "+userHash);
+        return userHash <= rolloutPercentage;
     }
 
 }

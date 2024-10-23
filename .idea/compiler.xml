@@ -8,6 +8,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="EurekaServer" />
+        <module name="WebLabService" />
         <module name="ConfigServer" />
         <module name="OrderService" />
         <module name="ProductService" />
@@ -35,6 +36,7 @@
       <module name="OrderService" options="-parameters" />
       <module name="ProductService" options="-parameters" />
       <module name="UserService" options="-parameters" />
+      <module name="WebLabService" options="-parameters" />
     </option>
   </component>
 </project>

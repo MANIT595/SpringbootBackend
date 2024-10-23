@@ -22,5 +22,9 @@ public interface UserService {
 
     UserDTO updateUserById(Long userId, User user);
 
+    boolean isFeatureEnabled(Long userId, Long weblabId);
+
+    UserDTO getUserDefault();
+
 //    String verify(User user);
 }
