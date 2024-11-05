@@ -59,3 +59,8 @@ Add Database properties to the application.properties file
 
 Add Eureka Server Properties in application.properties file
     ->eureka.instance.client.serverUrl.defaultZone=http://localhost:8761/eureka/
+
+
+docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3-management
+
+docker run -d -p 9411:9411 openzipkin/zipkin

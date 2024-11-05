@@ -12,7 +12,6 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.web.reactive.function.client.WebClient;
 
 
 @SpringBootApplication
@@ -23,10 +22,10 @@ public class OrderServiceApplication {
 	@Bean
 	public ModelMapper modelMapper(){return new ModelMapper();}
 
-	@Bean
-	public WebClient webClient(){
-		return WebClient.builder().build();
-	}
+//	@Bean
+//	public WebClient webClient(){
+//		return WebClient.builder().build();
+//	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(OrderServiceApplication.class, args);

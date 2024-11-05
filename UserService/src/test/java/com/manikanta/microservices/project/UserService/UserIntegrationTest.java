@@ -1,4 +1,4 @@
-package com.manikanta.microservices.project.UserService.Tests;
+package com.manikanta.microservices.project.UserService;
 
 import com.manikanta.microservices.project.UserService.Controller.UserController;
 import com.manikanta.microservices.project.UserService.DTO.UserDTO;

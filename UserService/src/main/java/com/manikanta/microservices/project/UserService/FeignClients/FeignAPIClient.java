@@ -1,4 +1,4 @@
-package com.manikanta.microservices.project.UserService.Service;
+package com.manikanta.microservices.project.UserService.FeignClients;
 
 
 import com.manikanta.microservices.project.UserService.DTO.OrderDTO;

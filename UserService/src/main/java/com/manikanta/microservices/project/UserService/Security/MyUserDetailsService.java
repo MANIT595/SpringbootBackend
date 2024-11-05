@@ -1,7 +1,7 @@
-package com.manikanta.microservices.project.UserService.Controller;
+package com.manikanta.microservices.project.UserService.Security;
 
 import com.manikanta.microservices.project.UserService.Entity.User;
-import com.manikanta.microservices.project.UserService.Entity.UserPrincipal;
+import com.manikanta.microservices.project.UserService.Security.UserPrincipal;
 import com.manikanta.microservices.project.UserService.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

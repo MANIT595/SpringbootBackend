@@ -19,4 +19,6 @@ public interface ProductService {
     void updateQuantity(Long productId, String status);
 
     List<Product> getProductsByOrderId(List<Long> orderId);
+
+    List<Product> getProductsByCriteria(String brand, String productDesc, String productName, Long quantity);
 }

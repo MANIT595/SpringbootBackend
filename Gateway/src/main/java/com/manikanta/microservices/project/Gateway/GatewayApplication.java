@@ -11,13 +11,18 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 //@EnableDiscoveryClient
 ////@EnableCaching
-@CrossOrigin("http://localhost:3000")
+//@CrossOrigin("http://localhost:3000")
 public class GatewayApplication {
 
-	@Bean
-	public RestTemplate template(){
-		return new RestTemplate();
-	}
+//	@Bean
+//	public RestTemplate template(){
+//		return new RestTemplate();
+//	}
+
+//	@Bean
+//	public JwtAuthenticationFilter jwtAuthenticationFilter() {
+//		return new JwtAuthenticationFilter();
+//	}
 
 	public static void main(String[] args) {
 

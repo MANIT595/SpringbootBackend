@@ -1,4 +1,4 @@
-package com.manikanta.microservices.project.UserService;
+package com.manikanta.microservices.project.UserService.Config;
 
 import com.manikanta.microservices.project.UserService.Enums.MyFeatures;
 import org.springframework.context.annotation.Bean;

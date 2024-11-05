@@ -1,5 +1,6 @@
-package com.manikanta.microservices.project.UserService.Entity;
+package com.manikanta.microservices.project.UserService.Security;
 
+import com.manikanta.microservices.project.UserService.Entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

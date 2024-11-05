@@ -1,5 +1,6 @@
 package com.manikanta.microservices.project.ProductService.Service.Implementation;
 
+import com.manikanta.microservices.project.ProductService.EmailAlreadyFoundException;
 import com.manikanta.microservices.project.ProductService.Entity.Product;
 import com.manikanta.microservices.project.ProductService.Repository.ProductRepository;
 import com.manikanta.microservices.project.ProductService.Service.ProductService;
@@ -24,30 +25,33 @@ public class ProductServiceImplementation implements ProductService {
 
     @Override
     public List<Product> getProducts() {
+        logger.info("inside getProducts method");
         List<Product> products = productRepository.findAll();
         return products;
     }
 
     @Override
     public Product getProduct(Long productId) {
-        Product product = productRepository.findById(productId).get();
+        logger.info("inside getProduct method");
+        Product product = productRepository.findById(productId).orElseThrow(()-> new EmailAlreadyFoundException("In products"));
         return product;
     }
 
     @Override
     public void deleteProduct(Long productId) {
+        logger.info("inside deleteProduct method");
         productRepository.deleteById(productId);
-        System.out.println("Product deleted");
     }
 
     @Override
     public void addProduct(Product product) {
+        logger.info("inside addProduct method");
         productRepository.save(product);
-        System.out.println("Product Added");
     }
 
     @Override
     public void updateQuantity(Long productId, String status) {
+        logger.info("inside updateQuantity method");
         Optional<Product> product = productRepository.findById(productId);
         if(product.isPresent()){
             long quantity = product.get().getQuantity();
@@ -59,17 +63,21 @@ public class ProductServiceImplementation implements ProductService {
             }
         }
         else{
-            System.out.println("No Product Available with this product ID");
+            logger.info("No Product Available with this product ID");
         }
 
     }
 
     @Override
     public List<Product> getProductsByOrderId(List<Long> orderIds) {
-        logger.info("Inside getProductsByOrderId");
+        logger.info("inside getProductsByOrderId");
         List<Product> products = productRepository.findProductsByOrderIds(orderIds);
-        logger.info("Returning products "+ products);
-        products.forEach((productDTO -> logger.info("product id ="+productDTO.getBrand())));
         return products;
+    }
+
+    @Override
+    public List<Product> getProductsByCriteria(String brand, String productDesc, String productName, Long quantity) {
+        logger.info("inside getProductsByCriteria");
+        return productRepository.findProductsByCriteria(brand,productDesc,productName,quantity);
     }
 }

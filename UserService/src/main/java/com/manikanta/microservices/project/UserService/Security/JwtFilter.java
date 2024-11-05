@@ -1,4 +1,4 @@
-package com.manikanta.microservices.project.UserService.Controller;
+package com.manikanta.microservices.project.UserService.Security;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 public class OrderPublisher {
 
     private final RabbitTemplate rabbitTemplate;
+
     private final String exchange = "order_exchange";
 
     public OrderPublisher(RabbitTemplate rabbitTemplate) {

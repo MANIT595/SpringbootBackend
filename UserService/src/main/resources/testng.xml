@@ -1,0 +1,10 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Suite">
+    <test name="UserServiceTests">
+        <classes>
+            <class name="com.manikanta.microservices.project.UserService.UserControllerTest"/>
+            <class name="com.manikanta.microservices.project.UserService.UserServiceApplicationTests"/>
+            <class name="com.manikanta.microservices.project.UserService.UserIntegrationTest"/>
+        </classes>
+    </test>
+</suite>

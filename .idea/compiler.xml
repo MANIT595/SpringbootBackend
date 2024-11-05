@@ -8,11 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="EurekaServer" />
-        <module name="WebLabService" />
-        <module name="ConfigServer" />
-        <module name="OrderService" />
         <module name="ProductService" />
         <module name="Gateway" />
+        <module name="WebLabService" />
+        <module name="NotificationService" />
+        <module name="ConfigServer" />
+        <module name="OrderService" />
+        <module name="GatewayServer" />
       </profile>
       <profile name="Annotation profile for UserService" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
@@ -27,12 +29,18 @@
         <module name="UserService" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="ExceptionHandling" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="ConfigServer" options="-parameters" />
       <module name="EurekaServer" options="-parameters" />
+      <module name="ExceptionHandling" options="-parameters" />
       <module name="Gateway" options="-parameters" />
+      <module name="GatewayServer" options="-parameters" />
+      <module name="NotificationService" options="-parameters" />
       <module name="OrderService" options="-parameters" />
       <module name="ProductService" options="-parameters" />
       <module name="UserService" options="-parameters" />

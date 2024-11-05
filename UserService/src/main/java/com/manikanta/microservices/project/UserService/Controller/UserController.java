@@ -4,6 +4,7 @@ import com.manikanta.microservices.project.UserService.DTO.UserDtoOrders;
 import com.manikanta.microservices.project.UserService.DTO.UserResponse;
 import com.manikanta.microservices.project.UserService.DTO.UserDTO;
 import com.manikanta.microservices.project.UserService.Entity.User;
+import com.manikanta.microservices.project.UserService.Exception.UserNotFoundException;
 import com.manikanta.microservices.project.UserService.Service.UserService;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Counter;
@@ -16,6 +17,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+//import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -24,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
         description = "User REST API to implement the CRUD operations"
 )
 @RestController
-//@RequestMapping("api/users")
+@RequestMapping("api/users")
 @AllArgsConstructor
 @CrossOrigin("http://localhost:3000")
 public class UserController {
@@ -58,11 +60,11 @@ public class UserController {
 
     }
 
-//    @PostMapping("/login")
-//    public String login(@RequestBody User user) {
-//
-//        return userService.verify(user);
-//    }
+    @PostMapping("/login")
+    public String login(@RequestBody User user) {
+
+        return userService.verify(user);
+    }
 
     @Operation(
             summary = "Get User By Id",
@@ -72,23 +74,27 @@ public class UserController {
             responseCode = "200",
             description = "Got User with id 200"
     )
-    @GetMapping("{user-id}")
-    public ResponseEntity<UserDTO> getUserById(@PathVariable("user-id") Long id) throws Exception {
-        System.out.println("Inside GetUserById Controller");
-        boolean isNewCheckoutEnabled = userService.isFeatureEnabled(id, 1L);
-        meterRegistry.counter("getUsersById").increment();
-        System.out.println("status-----"+isNewCheckoutEnabled);
-        if(isNewCheckoutEnabled){
-            return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
-        }
-        else{
-            return new ResponseEntity<>(userService.getUserDefault(), HttpStatus.OK);
-        }
-    }
+//    @GetMapping("{user-id}")
+//    public ResponseEntity<UserDTO> getUserById(@PathVariable("user-id") Long id) throws Exception {
+////        boolean isNewCheckoutEnabled = userService.isFeatureEnabled(id, 1L);
+////        meterRegistry.counter("getUsersById").increment();
+////        System.out.println("status-----"+isNewCheckoutEnabled);
+//        return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+////        if(isNewCheckoutEnabled){
+////            return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+////        }
+////        else{
+////            return new ResponseEntity<>(userService.getUserDefault(), HttpStatus.OK);
+////        }
+//    }
 
+//    @GetMapping("api/users/userdetails/{email}")
+//    public UserDetails getUserDetailsByEmail(@PathVariable("email") String email) throws Exception {
+//        return myUserDetailsService.loadUserByUsername(email);
+//    }
 
     @PatchMapping("/update/{user-id}")
-    public UserDTO getUpdateById(@PathVariable("user-id") Long id, @RequestBody @Valid User user){
+    public ResponseEntity<UserDTO> getUpdateById(@PathVariable("user-id") Long id, @RequestBody @Valid User user){
         return userService.updateUserById(id, user);
     }
 
@@ -124,9 +130,22 @@ public class UserController {
 
     @GetMapping("orders/{user-id}")
     public UserDtoOrders getUserAndOrderByUserId(@PathVariable("user-id") Long id){
-        System.out.println(id);
         meterRegistry.counter("USERS_getUserAndOrderByUserId").increment();
         return userService.getUsersOrders(id);
+    }
+
+        @GetMapping("{user-id}")
+    public ResponseEntity<UserDTO> getUserById(@PathVariable("user-id") Long id) throws Exception {
+//        boolean isNewCheckoutEnabled = userService.isFeatureEnabled(id, 1L);
+//        meterRegistry.counter("getUsersById").increment();
+//        System.out.println("status-----"+isNewCheckoutEnabled);
+        return userService.getUser(id);
+//        if(isNewCheckoutEnabled){
+//            return new ResponseEntity<>(userService.getUser(id), HttpStatus.OK);
+//        }
+//        else{
+//            return new ResponseEntity<>(userService.getUserDefault(), HttpStatus.OK);
+//        }
     }
 
 }

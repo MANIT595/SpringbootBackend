@@ -1,4 +1,4 @@
-package com.manikanta.microservices.project.UserService;
+package com.manikanta.microservices.project.UserService.AOP;
 
 
 import com.manikanta.microservices.project.UserService.Service.Implementation.UserServiceImplementation;

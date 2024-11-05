@@ -13,8 +13,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpStatus;
+//import org.springframework.stereotype.Service;
+//import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -34,13 +35,14 @@ public class OrderServiceImplementation implements OrderService {
 
     private static final Logger logger = LoggerFactory.getLogger(OrderServiceImplementation.class);
 
-    @Autowired
-    WebClient webClient;
+//    @Autowired
+//    WebClient webClient;
 
     @Autowired
     ModelMapper modelMapper;
     @Override
     public List<OrderDTO> getOrders() {
+        logger.info("inside getOrders method");
         List<OrderDTO> orders = orderRepository.findAll().stream().map(order -> mapToDTO(order)).collect(Collectors.toList());
         List<Long> orderIds = orders.stream().map(order -> order.getOrderId()).collect(Collectors.toList());
         List<ProductDTO> products = feignAPIClient.getProductsByOrderIds(orderIds);
@@ -67,25 +69,26 @@ public class OrderServiceImplementation implements OrderService {
 
     @Override
     public OrderDTO getOrder(Long orderId) {
+        logger.info("inside getOrder method");
         Order order = orderRepository.findById(orderId).get();
         return mapToDTO(order);
     }
 
     @Override
     public void deleteOrder(Long orderId) {
+        logger.info("inside deleteOrder method");
         orderRepository.deleteById(orderId);
-        System.out.println("Order Deleted");
     }
 
     @Override
     public void addOrder(Order order) {
+        logger.info("inside adOrder method");
         orderRepository.save(order);
-        System.out.println("Order Added");
     }
 
     @Override
     public List<OrderDTO> getOrderByUserId(Long userId) {
-        logger.info("Inside getOrderByUserId");
+        logger.info("inside getOrderByUserId method");
         List<OrderDTO> orders = orderRepository.findByUserId(userId).stream().map(order -> mapToDTO(order)).collect(Collectors.toList());
         List<Long> orderIds = orders.stream().map(order -> order.getOrderId()).collect(Collectors.toList());
         List<ProductDTO> products = feignAPIClient.getProductsByOrderIds(orderIds);
@@ -99,17 +102,18 @@ public class OrderServiceImplementation implements OrderService {
             // Set the matching products to the current order
             order.setProductsList(matchingProducts);
         });
-        logger.info("Returning orders "+ orders);
         return orders;
     }
 
     @Override
     public OrderDTO getUsersOrders(String orderId) {
+        logger.info("inside getUsersOrders method");
         return null;
     }
 
     @Override
     public String updateOrder(Order order) {
+        logger.info("inside updateOrder method");
         Optional<Order> order1 = orderRepository.findById((long) order.getOrderId());
         if(!order1.isPresent()){
             throw new RuntimeException("Order Not Found");
@@ -121,7 +125,6 @@ public class OrderServiceImplementation implements OrderService {
             orderPublisher.publishOrderCancelledEvent((long) order.getOrderId());
         }
         orderRepository.save(order);
-        System.out.println("Order Updated");
         return "Order Updated";
     }
 

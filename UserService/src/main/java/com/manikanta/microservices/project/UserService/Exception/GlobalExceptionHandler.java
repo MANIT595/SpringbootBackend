@@ -23,19 +23,34 @@ import java.util.stream.Collectors;
 @ControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(NoSuchElementException.class)
-    public ResponseEntity<ErrorDTO> handleNoSuchElementException(NoSuchElementException noSuchElementException, WebRequest webRequest){
+    @ExceptionHandler(CustomServiceException.class)
+    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ErrorDTO> handleCustomServiceException(CustomServiceException exception, WebRequest webRequest){
 
         ErrorDTO errorDTO = new ErrorDTO(
                 LocalDateTime.now(),
-                noSuchElementException.getMessage(),
+                exception.getMessage(),
                 webRequest.getDescription(false),
-                "User Not Found",
-                HttpStatus.NOT_FOUND.value()
+                "Custom Exception",
+                HttpStatus.BAD_REQUEST.value()
         );
 
-        return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
     }
+
+//    @ExceptionHandler(NoSuchElementException.class)
+//    public ResponseEntity<ErrorDTO> handleNoSuchElementException(NoSuchElementException noSuchElementException, WebRequest webRequest){
+//
+//        ErrorDTO errorDTO = new ErrorDTO(
+//                LocalDateTime.now(),
+//                noSuchElementException.getMessage(),
+//                webRequest.getDescription(false),
+//                "User Not Found",
+//                HttpStatus.NOT_FOUND.value()
+//        );
+//
+//        return new ResponseEntity<>(errorDTO, HttpStatus.NOT_FOUND);
+//    }
 
     // normal way to display validation messages
 //    @Override
@@ -52,15 +67,15 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 //    }
 
     // Using stream to display validation messages
-    @Override
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
-            List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
-            Map<String,String> errorsMap = fieldErrors
-                .stream()
-                .collect(Collectors.toMap(FieldError::getField,FieldError::getDefaultMessage));
-
-        return new ResponseEntity<>(errorsMap,HttpStatus.BAD_REQUEST);
-    }
+//    @Override
+//    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatusCode status, WebRequest request) {
+//            List<FieldError> fieldErrors = ex.getBindingResult().getFieldErrors();
+//            Map<String,String> errorsMap = fieldErrors
+//                .stream()
+//                .collect(Collectors.toMap(FieldError::getField,FieldError::getDefaultMessage));
+//
+//        return new ResponseEntity<>(errorsMap,HttpStatus.BAD_REQUEST);
+//    }
 
     // using streams and converted into customized errorDTO
 //    @Override
@@ -81,24 +96,24 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 //        return new ResponseEntity<>(errorDTOS,HttpStatus.BAD_REQUEST);
 //    }
 
-    @ExceptionHandler(EmailAlreadyFoundException.class)
-    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorDTO> handleEmailAlreadyFoundException(Exception exception, WebRequest webRequest){
-
-        ErrorDTO errorDTO = new ErrorDTO(
-                LocalDateTime.now(),
-                exception.getMessage(),
-                webRequest.getDescription(false),
-                "BAD REQUEST",
-                HttpStatus.BAD_REQUEST.value()
-        );
-
-        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
-    }
+//    @ExceptionHandler(EmailAlreadyFoundException.class)
+//    @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+//    public ResponseEntity<ErrorDTO> handleEmailAlreadyFoundException(Exception exception, WebRequest webRequest){
+//
+//        ErrorDTO errorDTO = new ErrorDTO(
+//                LocalDateTime.now(),
+//                exception.getMessage(),
+//                webRequest.getDescription(false),
+//                "BAD REQUEST",
+//                HttpStatus.BAD_REQUEST.value()
+//        );
+//
+//        return new ResponseEntity<>(errorDTO, HttpStatus.BAD_REQUEST);
+//    }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(value = HttpStatus.BAD_REQUEST)
-    public ResponseEntity<ErrorDTO> handleUserNotFoundException(Exception exception, WebRequest webRequest){
+    public ResponseEntity<ErrorDTO> handleUserNotFoundException(UserNotFoundException exception, WebRequest webRequest){
 
         ErrorDTO errorDTO = new ErrorDTO(
                 LocalDateTime.now(),
@@ -112,17 +127,17 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDTO> handleGlobalException(Exception exception, WebRequest webRequest){
-
-        ErrorDTO errorDTO = new ErrorDTO(
-                LocalDateTime.now(),
-                exception.getMessage(),
-                webRequest.getDescription(false),
-                "Internal Server Error",
-                HttpStatus.INTERNAL_SERVER_ERROR.value()
-        );
-
-        return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorDTO> handleGlobalException(Exception exception, WebRequest webRequest){
+//
+//        ErrorDTO errorDTO = new ErrorDTO(
+//                LocalDateTime.now(),
+//                exception.getMessage(),
+//                webRequest.getDescription(false),
+//                "Internal Server Error",
+//                HttpStatus.INTERNAL_SERVER_ERROR.value()
+//        );
+//
+//        return new ResponseEntity<>(errorDTO, HttpStatus.INTERNAL_SERVER_ERROR);
+//    }
 }

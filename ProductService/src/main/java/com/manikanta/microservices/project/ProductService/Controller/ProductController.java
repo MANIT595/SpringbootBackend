@@ -34,7 +34,6 @@ public class ProductController {
 
     @PostMapping("/order")
     public List<Product> getProductByOrderId(@RequestBody() List<Long> orderIds) {
-        System.out.println("In Get Mapping getProductByOrderId");
         meterRegistry.counter("PRODUCTS_getProductByOrderId").increment();
         return productService.getProductsByOrderId(orderIds);
     }
@@ -47,5 +46,15 @@ public class ProductController {
     @PostMapping
     public void addProduct(@RequestBody Product product){
         productService.addProduct(product);
+    }
+
+    @GetMapping("/search")
+    public List<Product> searchProduct(
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) String productDesc,
+            @RequestParam(required = false) String productName,
+            @RequestParam(required = false) Long quantity
+                              ){
+        return productService.getProductsByCriteria(brand,productDesc,productName,quantity);
     }
 }

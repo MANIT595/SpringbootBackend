@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryCustom {
 
     @Query("SELECT p FROM Product p WHERE p.orderId IN :orderIds")
     List<Product> findProductsByOrderIds(List<Long> orderIds);
@@ -22,4 +22,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Transactional
     @Query("UPDATE Product p SET p.quantity = :quantity WHERE p.productId = :productId")
     int updateQuantityByProductId(Long productId, Long quantity);
+
 }
